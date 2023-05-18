@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication(scanBasePackages = "com.skytouch")
-@RestController
 public class ManagementApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManagementApplication.class, args);
