@@ -1,6 +1,6 @@
 package com.skytouch.management;
 
-import com.skytouch.management.config.QueuesConfig;
+import com.skytouch.commonlibrary.config.QueuesConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;

@@ -1,4 +1,4 @@
-package com.skytouch.management.config;
+package com.skytouch.commonlibrary.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -9,8 +9,9 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@EnableRabbit
+@Component
 @Configuration
 public class QueuesConfig {
     public static final String LIST_PRODUCTS_QUEUE = "list_products_queue";
@@ -64,10 +65,11 @@ public class QueuesConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("products-rabbit");
+        connectionFactory.setHost("localhost");
         connectionFactory.setPort(5673);
         connectionFactory.setUsername("guest");
         connectionFactory.setPassword("guest");
+        System.out.println(connectionFactory);
         return connectionFactory;
     }
 }
