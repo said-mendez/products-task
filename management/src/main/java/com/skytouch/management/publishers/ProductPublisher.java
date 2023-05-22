@@ -1,6 +1,6 @@
 package com.skytouch.management.publishers;
 
-import com.skytouch.commonlibrary.config.QueuesConfig;
+import com.skytouch.commonlibrary.config.RabbitMQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ public class ProductPublisher {
     }
 
     public void publish() {
-        rabbitTemplate.convertAndSend(QueuesConfig.EXCHANGE, QueuesConfig.LIST_PRODUCTS_KEY, "Hello List Products!");
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.LIST_PRODUCTS_KEY, "Hello List Products!");
     }
 
     public void publishAdd() {
-        rabbitTemplate.convertAndSend(QueuesConfig.EXCHANGE, QueuesConfig.ADD_PRODUCTS_KEY, "Hello Add Products!");
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ADD_PRODUCTS_KEY, "Hello Add Products!");
     }
 }
