@@ -1,4 +1,4 @@
-package com.skytouch.commonlibrary;
+package com.skytouch.commonlibrary.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.internal.NotNull;
@@ -6,7 +6,7 @@ import com.sun.istack.internal.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Product {
+public class ProductAPI {
     @JsonProperty("id")
     private String id;
 
