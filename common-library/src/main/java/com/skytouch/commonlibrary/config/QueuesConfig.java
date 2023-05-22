@@ -1,7 +1,6 @@
 package com.skytouch.commonlibrary.config;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -17,7 +16,7 @@ public class QueuesConfig {
     public static final String LIST_PRODUCTS_QUEUE = "list_products_queue";
     public static final String LIST_PRODUCTS_KEY = "list_products";
     public static final String ADD_PRODUCTS_QUEUE = "add_products_queue";
-    public static final String ADD_PRODUCTS_key = "add_products";
+    public static final String ADD_PRODUCTS_KEY = "add_products";
     public static final String EXCHANGE = "products_task_exchange";
 
     @Bean
@@ -27,7 +26,7 @@ public class QueuesConfig {
 
     @Bean
     public Queue addProductsQueue() {
-        return new Queue(LIST_PRODUCTS_QUEUE);
+        return new Queue(ADD_PRODUCTS_QUEUE);
     }
 
     @Bean
@@ -46,7 +45,7 @@ public class QueuesConfig {
     public Binding addProductsBinding(Queue addProductsQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(addProductsQueue)
                 .to(directExchange)
-                .with(LIST_PRODUCTS_KEY);
+                .with(ADD_PRODUCTS_KEY);
     }
 
     @Bean
@@ -60,16 +59,5 @@ public class QueuesConfig {
         template.setMessageConverter(messageConverter());
 
         return template;
-    }
-
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("localhost");
-        connectionFactory.setPort(5673);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
-        System.out.println(connectionFactory);
-        return connectionFactory;
     }
 }
