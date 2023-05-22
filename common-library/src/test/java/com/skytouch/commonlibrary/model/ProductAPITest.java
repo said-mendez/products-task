@@ -20,7 +20,7 @@ public class ProductAPITest {
         Date createdAt = new Date();
 
         // When:
-        ProductAPI product = new ProductAPI();
+        Product product = new Product();
         product.setId(UUID.randomUUID().toString());
         product.setName(name);
         product.setDescription(description);

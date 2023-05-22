@@ -1,7 +1,6 @@
 package com.skytouch.commonlibrary.config;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Configuration
-public class QueuesConfig {
+public class RabbitMQConfig {
     public static final String LIST_PRODUCTS_QUEUE = "list_products_queue";
     public static final String LIST_PRODUCTS_KEY = "list_products";
     public static final String ADD_PRODUCTS_QUEUE = "add_products_queue";
