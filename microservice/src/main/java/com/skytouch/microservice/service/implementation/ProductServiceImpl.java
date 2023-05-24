@@ -13,7 +13,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductDao productDao;
 
-    public ProductServiceImpl(ProductDao productDao, EntityManager entityManager) {
+    public ProductServiceImpl(ProductDao productDao) {
         this.productDao = productDao;
     }
 
