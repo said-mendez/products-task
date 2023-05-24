@@ -22,7 +22,7 @@ public class ProductDB {
     private String description;
     @Column
     private BigDecimal price;
-    @Column
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
     @Column(name = "created_at")
     private Date createdAt;
