@@ -22,7 +22,6 @@ public class ProductServiceImpl implements ProductService {
         this.productDao = productDao;
     }
 
-    @Transactional
     @Override
     public ListProductsRequestResponse fetchAllProducts() {
         ListProductsRequestResponse listProductsRequestResponse;
@@ -42,8 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
         return listProductsRequestResponse;
     }
-
-    @Transactional
+    
     @Override
     public AddProductsRequestResponse addProduct(ProductDB productDB) {
         AddProductsRequestResponse addProductsRequestResponse;
