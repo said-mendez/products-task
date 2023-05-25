@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:33061/products_task?autoReconnect=true&useSSL=false
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+        ddl-auto: update
+  flyway:
+    baselineOnMigrate: true
