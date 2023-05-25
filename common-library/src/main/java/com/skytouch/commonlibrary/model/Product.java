@@ -3,8 +3,6 @@ package com.skytouch.commonlibrary.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,7 +11,6 @@ public class Product {
     @JsonProperty("id")
     private String id;
 
-    @NotNull
     @JsonProperty("name")
     private String name;
 
