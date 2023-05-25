@@ -11,15 +11,8 @@
     </parent>
 
     <artifactId>management</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>microservice</name>
+    <name>management</name>
     <description>Management app to get and post data from/into the DB, publish and consume messages from the queues</description>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -28,9 +21,19 @@
         </dependency>
 
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.skytouch</groupId>
             <artifactId>common-library</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
@@ -39,6 +42,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.skytouch.management.ManagementApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
