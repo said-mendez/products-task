@@ -1,6 +1,5 @@
 package com.skytouch.microservice.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;

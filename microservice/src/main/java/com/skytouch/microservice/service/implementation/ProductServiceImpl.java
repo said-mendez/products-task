@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
             listProductsRequestResponse = new ListProductsRequestResponse(products, responseStatus);
 
         } catch (Exception exception) {
-            log.error("Something went wrong while trying to list products => {}", exception);
+            log.error("Something went wrong while trying to list products => ", exception);
             responseStatus = new ResponseStatus(false, "Something went wrong while trying to list products.", exception.getMessage());
             listProductsRequestResponse = new ListProductsRequestResponse(null, responseStatus);
         }
@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
             responseStatus = new ResponseStatus(true, "Product added.", null);
             addProductsRequestResponse = new AddProductsRequestResponse(createdProductDB, responseStatus);
         } catch (Exception exception) {
-            log.error("Something went wrong while trying to add a product => {}", exception);
+            log.error("Something went wrong while trying to add a product => ", exception);
             responseStatus = new ResponseStatus(false, "Something went wrong while trying to add a product.", exception.getMessage());
             addProductsRequestResponse = new AddProductsRequestResponse(null, responseStatus);
         }
