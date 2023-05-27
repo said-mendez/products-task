@@ -19,11 +19,11 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item">
+      <a class="navbar-item" href="/products">
         List Products
       </a>
 
-      <a class="navbar-item">
+      <a class="navbar-item" href="products/addProduct">
         Add Products
       </a>
     </div>
