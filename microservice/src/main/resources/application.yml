@@ -1,12 +1,15 @@
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:33061/products_task?autoReconnect=true&useSSL=false
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:33061/products_task?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: password
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: true
     show-sql: true
-    hibernate:
-        ddl-auto: update
+    generate-ddl: true
   flyway:
     baselineOnMigrate: true
