@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,7 +28,7 @@ public class ProductDaoTest {
     public void shouldAddANewProduct() {
         // Given:
         ProductDB productDB = new ProductDB();
-        productDB.setName("New Product");
+        productDB.setName(UUID.randomUUID().toString());
         productDB.setDescription("New Product Description");
         BigDecimal price = new BigDecimal("123.123123123");
         price = price.setScale(2, RoundingMode.HALF_EVEN);
@@ -40,6 +41,7 @@ public class ProductDaoTest {
         assertThat(insertedProduct.getName()).isEqualTo(productDB.getName());
         assertThat(insertedProduct.getDescription()).isEqualTo(productDB.getDescription());
         assertThat(insertedProduct.getPrice()).isEqualTo(productDB.getPrice());
+        assertThat(insertedProduct.getId()).isNotNull();
     }
 
     @Test

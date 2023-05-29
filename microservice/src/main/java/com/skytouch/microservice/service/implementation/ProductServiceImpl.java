@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.skytouch.commonlibrary.config.RabbitMQConfig.ADD_PRODUCTS_QUEUE;
 
@@ -56,14 +57,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     @RabbitListener(queues = ADD_PRODUCTS_QUEUE)
     public ResponseStatus addProduct(Product product) {
-        ProductDB productDB = productDBMapper.apply(product);
         AddProductsRequestResponse addProductsRequestResponse;
         ResponseStatus responseStatus = new ResponseStatus();
         Product createdProduct;
 
         try {
+            ProductDB productDB = productDBMapper.apply(product);
             ProductDB createdProductDB = productDao.addProduct(
                     productDB.getName(),
                     productDB.getDescription(),
