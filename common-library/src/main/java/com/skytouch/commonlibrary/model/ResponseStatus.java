@@ -1,10 +1,9 @@
-package com.skytouch.microservice.model;
+package com.skytouch.commonlibrary.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class ResponseStatus {
     private Boolean success;
     private String message;
