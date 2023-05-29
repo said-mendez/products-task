@@ -1,5 +1,6 @@
 package com.skytouch.microservice.model;
 
+import com.skytouch.commonlibrary.model.ResponseStatus;
 import lombok.Data;
 
 import java.util.HashMap;
