@@ -9,7 +9,9 @@ import java.util.function.Function;
 @Service
 public class ProductMapper implements Function<ProductDB, Product> {
     @Override
-    public Product apply(ProductDB productDB) {
+    public Product apply(ProductDB productDB) throws NullPointerException {
+        if (productDB == null)
+            throw  new NullPointerException("Product is null!");
         Product product = new Product();
         product.setId(productDB.getId());
         product.setName(productDB.getName());
