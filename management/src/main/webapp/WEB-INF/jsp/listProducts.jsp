@@ -9,11 +9,25 @@
       <title>Products</title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     </head>
+    <style>
+        th {
+            background-color: #b794f6f4;
+        }
+    </style>
     <body>
         <jsp:include page="header.jsp">
             <jsp:param name="header" value="Products List" />
         </jsp:include>
-        <main class="container mt-5">
+
+        <c:if test="${not products.responseStatus.status.success}">
+            <div class="notification is-danger">
+              <button class="delete"></button>
+              <c:out value="${products.responseStatus.status.message}"/>
+              <strong><c:out value="${products.responseStatus.status.exception}"/></strong>
+            </div>
+        </c:if>
+
+        <main class="container mt-5 mb-5">
             <div class="table-container">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
@@ -26,9 +40,32 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <c:if test="${products.responseStatus.status.success}">
+                        <c:forEach items="${products.data}" var="product">
+                            <tr>
+                                <td>${product.id}</td>
+                                <td>${product.name}</td>
+                                <td>${product.description}</td>
+                                <td>${product.price}</td>
+                                <td>${product.createdAt}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:if>
                 </tbody>
               </table>
             </div>
         </main>
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', () => {
+              (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
+
+                $delete.addEventListener('click', () => {
+                  $notification.parentNode.removeChild($notification);
+                });
+              });
+            });
+        </script>
     </body>
 </html>

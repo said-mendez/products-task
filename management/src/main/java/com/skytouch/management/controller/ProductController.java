@@ -42,7 +42,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public String listProducts() {
+    public String listProducts(Model model) {
+        model.addAttribute("products", productClientService.listProducts());
         return LIST_PRODUCTS_VIEW;
     }
 }
