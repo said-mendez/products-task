@@ -1,5 +1,6 @@
 package com.skytouch.microservice.service;
 
+import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
 import com.skytouch.microservice.model.ProductDB;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,9 +34,9 @@ public class ProductServiceTest {
     @Test
     public void canAddAProduct() {
         // Given:
-        String randoName = UUID.randomUUID().toString();
+        String randomName = UUID.randomUUID().toString();
         ProductDB productDB = new ProductDB();
-        productDB.setName(randoName);
+        productDB.setName(randomName);
         productDB.setDescription("New Product Description");
         BigDecimal price = new BigDecimal("123.123123123");
         price = price.setScale(2, RoundingMode.HALF_EVEN);
@@ -53,29 +53,7 @@ public class ProductServiceTest {
 
         // Then:
         assertThat(responseStatus.getSuccess()).isEqualTo(true);
-        assertThat(responseStatus.getMessage()).isEqualTo("Product " + randoName + " was created.");
-    }
-
-    @Test
-    public void tryingToAddDuplicatedProduct() {
-        // Given:
-        ProductDB productDB = new ProductDB();
-        productDB.setDescription("New Product Description");
-        BigDecimal price = new BigDecimal("123.123123123");
-        price = price.setScale(2, RoundingMode.HALF_EVEN);
-        productDB.setPrice(price);
-
-        // When:
-        when(productDao.addProduct(
-                productDB.getName(),
-                productDB.getDescription(),
-                productDB.getPrice()))
-                .thenReturn(productDB);
-
-        ResponseStatus responseStatus = productService.addProduct(productMapper.apply(productDB));
-
-        // Then:
-        System.out.println(responseStatus);
+        assertThat(responseStatus.getMessage()).isEqualTo("Product " + randomName + " was created.");
     }
 
     @Test
@@ -92,4 +70,18 @@ public class ProductServiceTest {
         assertThat(responseStatus.getException()).isEqualTo("Product is null!");
     }
 
+    @Test
+    public void tryingToListProductsThrowsException() {
+        // Given:
+        when(productDao.findAllProducts()).thenThrow(new RuntimeException("Forced exception!"));
+
+        // When:
+        ListProductsRequestResponse listProductsRequestResponse = productService.fetchAllProducts();
+
+        // Then:
+        System.out.println(listProductsRequestResponse);
+        assertThat(listProductsRequestResponse.getResponseStatus().get("status").getSuccess()).isFalse();
+        assertThat(listProductsRequestResponse.getResponseStatus().get("status").getMessage()).isEqualTo("Something went wrong while trying to list products: ");
+        assertThat(listProductsRequestResponse.getResponseStatus().get("status").getException()).isEqualTo("Forced exception!");
+    }
 }

@@ -88,8 +88,9 @@ public class ProductDaoTest {
         // Given:
         int numberOfProducts = 3;
         for (int i = 1; i <= numberOfProducts; i++) {
+            String randomName = UUID.randomUUID().toString();
             ProductDB productDB = new ProductDB();
-            productDB.setName("Product " + i);
+            productDB.setName("Product " + randomName);
             productDB.setDescription("Product Description " + i);
             BigDecimal price = new BigDecimal("1234");
             price = price.setScale(2, RoundingMode.HALF_EVEN);
