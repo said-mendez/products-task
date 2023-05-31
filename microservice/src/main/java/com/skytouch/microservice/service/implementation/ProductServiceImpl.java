@@ -1,7 +1,6 @@
 package com.skytouch.microservice.service.implementation;
 
 import com.skytouch.commonlibrary.model.Product;
-import com.skytouch.microservice.model.AddProductsRequestResponse;
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.microservice.model.ProductDB;
 import com.skytouch.commonlibrary.model.ResponseStatus;
@@ -35,7 +34,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     @RabbitListener(queues = LIST_PRODUCTS_QUEUE)
     public ListProductsRequestResponse fetchAllProducts() {
         ListProductsRequestResponse listProductsRequestResponse;
@@ -43,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
         try {
             List<ProductDB> productsDB = productDao.findAllProducts();
-            List<Product> products = productsDB.stream().map(productDB -> productMapper.apply(productDB))
+            List<Product> products = productsDB.stream().map(productMapper)
                     .collect(Collectors.toList());
 
             responseStatus.setSuccess(true);
@@ -55,8 +53,8 @@ public class ProductServiceImpl implements ProductService {
             String LIST_PRODUCTS_ERROR_MESSAGE = "Something went wrong while trying to list products: ";
             log.error(LIST_PRODUCTS_ERROR_MESSAGE, exception);
             responseStatus.setSuccess(false);
-            responseStatus.setMessage("Something went wrong while trying to list products.");
-            responseStatus.setException(exception.getMessage());
+            responseStatus.setMessage(LIST_PRODUCTS_ERROR_MESSAGE);
+            responseStatus.setException(ExceptionUtils.getRootCause(exception).getMessage());
             listProductsRequestResponse = new ListProductsRequestResponse(null, responseStatus);
         }
 
@@ -64,10 +62,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
     @RabbitListener(queues = ADD_PRODUCTS_QUEUE)
     public ResponseStatus addProduct(Product product) {
-        AddProductsRequestResponse addProductsRequestResponse;
         ResponseStatus responseStatus = new ResponseStatus();
         Product createdProduct;
 
