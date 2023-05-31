@@ -19,15 +19,14 @@
             <jsp:param name="header" value="Products List" />
         </jsp:include>
 
-        <c:if test="${not products.responseStatus.status.success}">
-            <div class="notification is-danger">
-              <button class="delete"></button>
-              <c:out value="${products.responseStatus.status.message}"/>
-              <strong><c:out value="${products.responseStatus.status.exception}"/></strong>
-            </div>
-        </c:if>
-
         <main class="container mt-5 mb-5">
+            <c:if test="${not products.responseStatus.status.success}">
+                <div class="notification is-danger mt-5">
+                  <button class="delete"></button>
+                  <c:out value="${products.responseStatus.status.message}"/>
+                  <strong><c:out value="${products.responseStatus.status.exception}"/></strong>
+                </div>
+            </c:if>
             <div class="table-container">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>

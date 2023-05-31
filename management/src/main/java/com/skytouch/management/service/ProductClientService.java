@@ -21,6 +21,6 @@ public class ProductClientService {
     }
 
     public ListProductsRequestResponse listProducts() {
-        return (ListProductsRequestResponse) rabbitTemplate.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY);
+        return (ListProductsRequestResponse) rabbitTemplate.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY, "");
     }
 }
