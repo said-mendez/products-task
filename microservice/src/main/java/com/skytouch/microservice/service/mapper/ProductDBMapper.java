@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class ProductDBMapper implements Function<Product, ProductDB> {
     @Override
     public ProductDB apply(Product product) throws NullPointerException {
-        if (product == null)
+        if (product.getName() == null || product.getPrice() == null)
             throw  new NullPointerException("Product is null!");
         ProductDB productDB = new ProductDB();
         productDB.setName(product.getName());
