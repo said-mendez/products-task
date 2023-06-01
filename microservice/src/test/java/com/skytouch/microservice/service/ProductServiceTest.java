@@ -67,7 +67,7 @@ public class ProductServiceTest {
         ResponseStatus responseStatus = productService.addProduct(product);
         assertThat(responseStatus.getSuccess()).isEqualTo(false);
         assertThat(responseStatus.getMessage()).isEqualTo(ADD_PRODUCT_ERROR_MESSAGE);
-        assertThat(responseStatus.getException()).isEqualTo("Product is null!");
+        assertThat(responseStatus.getException()).isEqualTo("Required attributes are missing or product is null!");
     }
 
     @Test
@@ -79,7 +79,6 @@ public class ProductServiceTest {
         ListProductsRequestResponse listProductsRequestResponse = productService.fetchAllProducts();
 
         // Then:
-        System.out.println(listProductsRequestResponse);
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getSuccess()).isFalse();
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getMessage()).isEqualTo("Something went wrong while trying to list products: ");
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getException()).isEqualTo("Forced exception!");

@@ -11,7 +11,7 @@ public class ProductDBMapper implements Function<Product, ProductDB> {
     @Override
     public ProductDB apply(Product product) throws NullPointerException {
         if (product.getName() == null || product.getPrice() == null)
-            throw  new NullPointerException("Product is null!");
+            throw  new NullPointerException("Required attributes are missing or product is null!");
         ProductDB productDB = new ProductDB();
         productDB.setName(product.getName());
         productDB.setDescription(product.getDescription());
