@@ -20,7 +20,7 @@
         </jsp:include>
 
         <main class="container mt-5 mb-5">
-            <c:if test="${not products.responseStatus.status.success}">
+            <c:if test="${not products.responseStatus.status.success && products.responseStatus.status.message != null}">
                 <div class="notification is-danger mt-5">
                   <button class="delete"></button>
                   <c:out value="${products.responseStatus.status.message}"/>
