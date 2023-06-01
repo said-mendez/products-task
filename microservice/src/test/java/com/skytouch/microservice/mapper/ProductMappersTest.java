@@ -30,7 +30,7 @@ public class ProductMappersTest {
         // Then:
         assertThatThrownBy(() -> productMapper.apply(productDB))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessage("Product is null!");
+                .hasMessage("Required attributes are missing or product is null!");
     }
 
     @Test
@@ -42,6 +42,6 @@ public class ProductMappersTest {
         // Then:
         assertThatThrownBy(() -> productDBMapper.apply(product))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessage("Product is null!");
+                .hasMessage("Required attributes are missing or product is null!");
     }
 }
