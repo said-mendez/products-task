@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import static com.skytouch.commonlibrary.config.RabbitMQConfig.*;
 
 @Service
-public class ProductClientService {
+public class ProductPublisherService {
     private final RabbitTemplate rabbitTemplate;
 
-    public ProductClientService(RabbitTemplate rabbitTemplate) {
+    public ProductPublisherService(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -23,7 +23,7 @@ public class ProductClientService {
         return responseStatus;
     }
 
-    public ListProductsRequestResponse listProducts() throws RuntimeException {
+    public ListProductsRequestResponse listProducts() throws RuntimeException, Exception {
         ListProductsRequestResponse listProductsRequestResponse = (ListProductsRequestResponse) rabbitTemplate.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY, "");
         if (listProductsRequestResponse == null)
             throw new RuntimeException("Microservice is not responding!");

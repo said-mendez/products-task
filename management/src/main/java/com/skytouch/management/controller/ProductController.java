@@ -1,7 +1,7 @@
 package com.skytouch.management.controller;
 
 import com.skytouch.commonlibrary.model.Product;
-import com.skytouch.management.service.ProductClientService;
+import com.skytouch.management.service.ProductPublisherService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 public class ProductController {
 
     public static final String MODEL = "product";
+    public static final String PRODUCTS_MODEL = "products";
     private static final String ADD_PRODUCT_VIEW = "addProduct";
     private static final String LIST_PRODUCTS_VIEW = "listProducts";
     private static final String ADD_PRODUCTS_URL = "/products/addProduct";
-    private final ProductClientService productClientService;
+    private final ProductPublisherService productClientService;
 
-    public ProductController(ProductClientService productClientService) {
+    public ProductController(ProductPublisherService productClientService) {
         this.productClientService = productClientService;
     }
 
@@ -42,8 +43,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public String listProducts(Model model) {
-        model.addAttribute("products", productClientService.listProducts());
+    public String listProducts(Model model) throws Exception {
+        model.addAttribute(PRODUCTS_MODEL, productClientService.listProducts());
         return LIST_PRODUCTS_VIEW;
     }
 }
