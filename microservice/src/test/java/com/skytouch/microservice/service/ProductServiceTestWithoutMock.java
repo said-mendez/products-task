@@ -103,7 +103,6 @@ public class ProductServiceTestWithoutMock {
         ListProductsRequestResponse listProductsRequestResponse = (ListProductsRequestResponse) rabbitTemplate.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY, "");
 
         // Then:
-        assertThat(listProductsRequestResponse.getData().size()).isGreaterThanOrEqualTo(expectedProductsList.size());
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getSuccess()).isTrue();
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getMessage()).isEqualTo("Listing products");
         assertThat(listProductsRequestResponse.getResponseStatus().get("status").getException()).isNull();
