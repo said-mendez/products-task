@@ -1,7 +1,7 @@
 package com.skytouch.management.controller;
 
 import com.skytouch.commonlibrary.model.Product;
-import com.skytouch.management.service.ProductServiceRabbitMQ;
+import com.skytouch.management.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +20,10 @@ public class ProductController {
     private static final String ADD_PRODUCT_VIEW = "addProduct";
     private static final String LIST_PRODUCTS_VIEW = "listProducts";
     private static final String ADD_PRODUCTS_URL = "/products/addProduct";
-    private final ProductServiceRabbitMQ productServiceRabbitMQ;
+    private final ProductService productService;
 
-    public ProductController(ProductServiceRabbitMQ productServiceRabbitMQ) {
-        this.productServiceRabbitMQ = productServiceRabbitMQ;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping("/addProduct")
@@ -37,14 +37,14 @@ public class ProductController {
     public RedirectView addBook(@ModelAttribute(MODEL) Product product, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView(ADD_PRODUCTS_URL);
         redirectAttributes.addFlashAttribute("addProductSuccess", true);
-        redirectAttributes.addFlashAttribute("responseStatus", productServiceRabbitMQ.addProduct(product));
+        redirectAttributes.addFlashAttribute("responseStatus", productService.addProduct(product));
 
         return redirectView;
     }
 
     @GetMapping("")
     public String listProducts(Model model) {
-        model.addAttribute(PRODUCTS_MODEL, productServiceRabbitMQ.listProducts());
+        model.addAttribute(PRODUCTS_MODEL, productService.listProducts());
         return LIST_PRODUCTS_VIEW;
     }
 }

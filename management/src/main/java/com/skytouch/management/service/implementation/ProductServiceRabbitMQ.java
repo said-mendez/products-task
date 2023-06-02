@@ -4,7 +4,7 @@ import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
 import com.skytouch.management.exception.MicroserviceException;
-import com.skytouch.management.service.ProductServiceRabbitMQ;
+import com.skytouch.management.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import static com.skytouch.commonlibrary.config.RabbitMQConfig.*;
 
 @Service
 @Slf4j
-public class ProductServiceRabbitMQImpl implements ProductServiceRabbitMQ {
+public class ProductServiceRabbitMQ implements ProductService {
     private final RabbitTemplate rabbitTemplate;
 
-    public ProductServiceRabbitMQImpl(RabbitTemplate rabbitTemplate) {
+    public ProductServiceRabbitMQ(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
