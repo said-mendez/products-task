@@ -34,7 +34,7 @@ public class ProductServiceRabbitMQImpl implements ProductServiceRabbitMQ {
     public ListProductsRequestResponse listProducts() {
         ListProductsRequestResponse listProductsRequestResponse = (ListProductsRequestResponse) rabbitTemplate.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY, "");
         if (listProductsRequestResponse == null) {
-            log.error("Error calling Microservice: ", "Microservice is not responding!");
+            log.error("Microservice did not provide a response on products retrieval");
             throw new MicroserviceException("Microservice is not responding!");
         }
         return listProductsRequestResponse;
