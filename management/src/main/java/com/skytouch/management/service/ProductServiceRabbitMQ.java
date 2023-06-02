@@ -6,5 +6,5 @@ import com.skytouch.commonlibrary.model.ResponseStatus;
 
 public interface ProductServiceRabbitMQ {
     ResponseStatus addProduct(Product product);
-    ListProductsRequestResponse listProducts() throws Exception;
+    ListProductsRequestResponse listProducts();
 }

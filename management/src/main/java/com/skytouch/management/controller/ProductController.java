@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public String listProducts(Model model) throws Exception {
+    public String listProducts(Model model) {
         model.addAttribute(PRODUCTS_MODEL, productServiceRabbitMQ.listProducts());
         return LIST_PRODUCTS_VIEW;
     }
