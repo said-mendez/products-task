@@ -24,7 +24,7 @@ public class ProductServiceRabbitMQ implements ProductService {
     public ResponseStatus addProduct(Product product) {
         ResponseStatus responseStatus = (ResponseStatus) rabbitTemplate.convertSendAndReceive(EXCHANGE, ADD_PRODUCTS_KEY, product);
         if (responseStatus == null) {
-            log.error("Error calling Microservice: ", "Microservice is not responding!");
+            log.error("Microservice did not provide a response on products addition");
             throw new MicroserviceException("Microservice is not responding!");
         }
         return responseStatus;
