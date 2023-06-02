@@ -3,6 +3,7 @@ package com.skytouch.management.controller;
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
+import com.skytouch.management.exception.MicroserviceException;
 import com.skytouch.management.service.ProductServiceRabbitMQ;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.net.ConnectException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -137,30 +137,10 @@ public class ProductControllerTest {
         ResponseStatus expectedResponseStatus = new ResponseStatus();
         expectedResponseStatus.setSuccess(false);
         expectedResponseStatus.setMessage("Exception from test!");
-        expectedResponseStatus.setException("java.lang.Exception");
+        expectedResponseStatus.setException("com.skytouch.management.exception.MicroserviceException");
 
         // When:
-        when(productServiceRabbitMQ.listProducts()).thenThrow(new Exception("Exception from test!"));
-
-        MvcResult result = mockMvc.perform(get("/products")).andReturn();
-        ResponseStatus responseStatusResult = (ResponseStatus) result.getModelAndView().getModel().get("responseStatus");
-
-        // Then:;
-        assertThat(expectedResponseStatus.getSuccess()).isEqualTo(responseStatusResult.getSuccess());
-        assertThat(expectedResponseStatus.getMessage()).isEqualTo(responseStatusResult.getMessage());
-        assertThat(expectedResponseStatus.getException()).isEqualTo(responseStatusResult.getException());
-    }
-
-    @Test
-    public void tryingToListProductsThrowsConnectException() throws Exception {
-        // Given:
-        ResponseStatus expectedResponseStatus = new ResponseStatus();
-        expectedResponseStatus.setSuccess(false);
-        expectedResponseStatus.setMessage("Exception from test!");
-        expectedResponseStatus.setException("java.net.ConnectException");
-
-        // When:
-        when(productServiceRabbitMQ.listProducts()).thenThrow(new ConnectException("Exception from test!"));
+        when(productServiceRabbitMQ.listProducts()).thenThrow(new MicroserviceException("Exception from test!"));
 
         MvcResult result = mockMvc.perform(get("/products")).andReturn();
         ResponseStatus responseStatusResult = (ResponseStatus) result.getModelAndView().getModel().get("responseStatus");

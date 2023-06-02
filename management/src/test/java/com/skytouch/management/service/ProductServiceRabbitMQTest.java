@@ -81,7 +81,7 @@ public class ProductServiceRabbitMQTest {
     }
 
     @Test
-    public void listProducts() throws Exception {
+    public void listProducts() {
         // Given:
         // When:
         ListProductsRequestResponse listProductsRequestResponse = productServiceRabbitMQ.listProducts();
