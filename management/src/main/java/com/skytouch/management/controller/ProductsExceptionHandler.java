@@ -1,6 +1,7 @@
 package com.skytouch.management.controller;
 
 import com.skytouch.commonlibrary.model.ResponseStatus;
+import com.skytouch.management.exception.MicroserviceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,6 +52,17 @@ public class ProductsExceptionHandler {
         modelAndView.addObject(MODEL, responseStatus);
         modelAndView.setViewName(ERROR_VIEW);
         log.error("RuntimeException", runtimeException);
+
+        return modelAndView;
+    }
+
+    @ExceptionHandler(value = MicroserviceException.class)
+    public ModelAndView handleMicroServiceException(MicroserviceException microserviceException) {
+        final ModelAndView modelAndView = new ModelAndView();
+        ResponseStatus responseStatus = createResponseStatus(microserviceException.getClass().getName(), microserviceException.getMessage());
+        modelAndView.addObject(MODEL, responseStatus);
+        modelAndView.setViewName(ERROR_VIEW);
+        log.error("MicroserviceException", microserviceException);
 
         return modelAndView;
     }
