@@ -4,6 +4,7 @@ package com.skytouch.management.service;
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
+import com.skytouch.management.service.implementation.ProductServiceRabbitMQImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
-public class ProductPublisherServiceTest {
+public class ProductServiceRabbitMQTest {
     @Autowired
-    ProductPublisherService productPublisherService;
+    ProductServiceRabbitMQImpl productServiceRabbitMQ;
 
     @Test
     public void addProduct() {
@@ -31,7 +32,7 @@ public class ProductPublisherServiceTest {
         product.setPrice(new BigDecimal("45.67"));
 
         // When:
-        ResponseStatus responseStatus = productPublisherService.addProduct(product);
+        ResponseStatus responseStatus = productServiceRabbitMQ.addProduct(product);
 
         // Then:
         assertThat(responseStatus.getSuccess()).isTrue();
@@ -47,7 +48,7 @@ public class ProductPublisherServiceTest {
         product.setPrice(new BigDecimal("45.67"));
 
         // When:
-        ResponseStatus responseStatus = productPublisherService.addProduct(product);
+        ResponseStatus responseStatus = productServiceRabbitMQ.addProduct(product);
 
         // Then:
         assertThat(responseStatus.getSuccess()).isFalse();
@@ -63,7 +64,7 @@ public class ProductPublisherServiceTest {
         product.setName(randomName);
         product.setDescription("Description " + randomName);
         product.setPrice(new BigDecimal("45.67"));
-        productPublisherService.addProduct(product);
+        productServiceRabbitMQ.addProduct(product);
 
         Product product2 = new Product();
         product2.setName(randomName);
@@ -71,7 +72,7 @@ public class ProductPublisherServiceTest {
         product2.setPrice(new BigDecimal("45.67"));
 
         // When:
-        ResponseStatus responseStatus = productPublisherService.addProduct(product2);
+        ResponseStatus responseStatus = productServiceRabbitMQ.addProduct(product2);
 
         // Then:
         assertThat(responseStatus.getSuccess()).isFalse();
@@ -83,7 +84,7 @@ public class ProductPublisherServiceTest {
     public void listProducts() throws Exception {
         // Given:
         // When:
-        ListProductsRequestResponse listProductsRequestResponse = productPublisherService.listProducts();
+        ListProductsRequestResponse listProductsRequestResponse = productServiceRabbitMQ.listProducts();
 
 
         // Then:

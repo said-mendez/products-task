@@ -3,7 +3,7 @@ package com.skytouch.management.controller;
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
-import com.skytouch.management.service.ProductPublisherService;
+import com.skytouch.management.service.ProductServiceRabbitMQ;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 public class ProductControllerTest {
     @MockBean
-    private ProductPublisherService productPublisherService;
+    private ProductServiceRabbitMQ productServiceRabbitMQ;
     @Autowired
     private MockMvc mockMvc;
 
@@ -56,7 +56,7 @@ public class ProductControllerTest {
         expectedResponseStatus.setException(null);
 
         // When:
-        when(productPublisherService.addProduct(expectedProduct)).thenReturn(expectedResponseStatus);
+        when(productServiceRabbitMQ.addProduct(expectedProduct)).thenReturn(expectedResponseStatus);
 
         // Then:
         MvcResult result =
@@ -90,7 +90,7 @@ public class ProductControllerTest {
         expectedResponseStatus.setException("java.lang.RuntimeException");
 
         // When:
-        when(productPublisherService.addProduct(duplicatedProduct)).thenThrow(new RuntimeException("Microservice is not responding!"));
+        when(productServiceRabbitMQ.addProduct(duplicatedProduct)).thenThrow(new RuntimeException("Microservice is not responding!"));
 
         MvcResult result =
                 mockMvc.perform(
@@ -119,7 +119,7 @@ public class ProductControllerTest {
         ListProductsRequestResponse expectedResponse = new ListProductsRequestResponse(null, expectedResponseStatus);
 
         // When:
-        when(productPublisherService.listProducts()).thenReturn(expectedResponse);
+        when(productServiceRabbitMQ.listProducts()).thenReturn(expectedResponse);
         MvcResult result = mockMvc.perform(get("/products")).andReturn();
         ListProductsRequestResponse responseStatusResult = (ListProductsRequestResponse) result.getModelAndView().getModel().get("products");
         ResponseStatus actualResponseStatus = responseStatusResult.getResponseStatus().get("status");
@@ -140,7 +140,7 @@ public class ProductControllerTest {
         expectedResponseStatus.setException("java.lang.Exception");
 
         // When:
-        when(productPublisherService.listProducts()).thenThrow(new Exception("Exception from test!"));
+        when(productServiceRabbitMQ.listProducts()).thenThrow(new Exception("Exception from test!"));
 
         MvcResult result = mockMvc.perform(get("/products")).andReturn();
         ResponseStatus responseStatusResult = (ResponseStatus) result.getModelAndView().getModel().get("responseStatus");
@@ -160,7 +160,7 @@ public class ProductControllerTest {
         expectedResponseStatus.setException("java.net.ConnectException");
 
         // When:
-        when(productPublisherService.listProducts()).thenThrow(new ConnectException("Exception from test!"));
+        when(productServiceRabbitMQ.listProducts()).thenThrow(new ConnectException("Exception from test!"));
 
         MvcResult result = mockMvc.perform(get("/products")).andReturn();
         ResponseStatus responseStatusResult = (ResponseStatus) result.getModelAndView().getModel().get("responseStatus");
