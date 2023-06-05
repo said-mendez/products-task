@@ -23,7 +23,7 @@
         List Products
       </a>
 
-      <a class="navbar-item" href="products/addProduct">
+      <a class="navbar-item" href="/products/addProduct">
         Add Products
       </a>
     </div>
