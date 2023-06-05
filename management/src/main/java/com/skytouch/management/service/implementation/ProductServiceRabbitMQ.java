@@ -2,7 +2,6 @@ package com.skytouch.management.service.implementation;
 
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 import com.skytouch.commonlibrary.model.Product;
-import com.skytouch.commonlibrary.model.ResponseStatus;
 import com.skytouch.management.exception.MicroserviceException;
 import com.skytouch.management.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
