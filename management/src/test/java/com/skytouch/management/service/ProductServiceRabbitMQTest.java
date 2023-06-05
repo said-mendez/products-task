@@ -2,6 +2,7 @@ package com.skytouch.management.service;
 
 
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
+import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
 import com.skytouch.management.exception.MicroserviceException;
 import com.skytouch.management.service.implementation.ProductServiceRabbitMQ;
@@ -12,14 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-import static com.skytouch.commonlibrary.config.RabbitMQConfig.EXCHANGE;
-import static com.skytouch.commonlibrary.config.RabbitMQConfig.LIST_PRODUCTS_KEY;
+import static com.skytouch.commonlibrary.config.RabbitMQConfig.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceRabbitMQTest {
@@ -27,8 +29,23 @@ public class ProductServiceRabbitMQTest {
     public RabbitTemplate rabbitTemplateMock;
 
     @InjectMocks
-    @Autowired
     ProductServiceRabbitMQ productServiceRabbitMQ;
+
+    @Test
+    public void addProduct() {
+        // Given:
+        String randomName = UUID.randomUUID().toString();
+        Product expectedProduct = new Product();
+        expectedProduct.setName(randomName);
+        expectedProduct.setDescription("Product Description");
+        expectedProduct.setPrice(new BigDecimal("182.54"));
+
+        // When:
+        productServiceRabbitMQ.addProduct(expectedProduct);
+
+        // Then:
+        verify(rabbitTemplateMock, times(1)).convertAndSend(EXCHANGE, ADD_PRODUCTS_KEY, expectedProduct);
+    }
 
     @Test(expected = MicroserviceException.class)
     public void listingProductsWithMicroserviceDownThrowsMicroserviceException() {
@@ -36,7 +53,6 @@ public class ProductServiceRabbitMQTest {
         // When:
         // Then:
         productServiceRabbitMQ.listProducts();
-
     }
 
     @Test
