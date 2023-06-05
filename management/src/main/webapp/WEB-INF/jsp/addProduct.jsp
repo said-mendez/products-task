@@ -12,23 +12,6 @@
         <jsp:include page="header.jsp">
               <jsp:param name="header" value="Add Product" />
         </jsp:include>
-        <section class="section mt-5">
-            <c:if test="${addProductSuccess}">
-                <c:if test="${responseStatus.success}">
-                    <div class="notification is-success">
-                      <button class="delete"></button>
-                      <strong><c:out value="${responseStatus.message}"/></strong>
-                    </div>
-                </c:if>
-                <c:if test="${not responseStatus.success}">
-                    <div class="notification is-danger">
-                      <button class="delete"></button>
-                      <c:out value="${responseStatus.message}"/>
-                      <strong><c:out value="${responseStatus.exception}"/></strong>
-                    </div>
-                </c:if>
-            </c:if>
-        </section>
         <main class="container">
             <section class="section box mt-2">
                 <form:form id="add-product" method="post" action="/products/addProduct" modelAttribute="product">
@@ -57,17 +40,5 @@
                 </form:form>
             </section>
         </main>
-
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', () => {
-              (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-                const $notification = $delete.parentNode;
-
-                $delete.addEventListener('click', () => {
-                  $notification.parentNode.removeChild($notification);
-                });
-              });
-            });
-        </script>
     </body>
 </html>
