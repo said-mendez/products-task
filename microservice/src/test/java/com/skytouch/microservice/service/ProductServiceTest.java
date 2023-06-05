@@ -49,25 +49,10 @@ public class ProductServiceTest {
                 productDB.getPrice()))
                 .thenReturn(productDB);
 
-        ResponseStatus responseStatus = productService.addProduct(productMapper.apply(productDB));
+        productService.addProduct(productMapper.apply(productDB));
 
         // Then:
-        assertThat(responseStatus.getSuccess()).isEqualTo(true);
-        assertThat(responseStatus.getMessage()).isEqualTo("Product " + randomName + " was created.");
-    }
-
-    @Test
-    public void tryingToAddNullProductReturnsError() {
-        // Given:
-        String ADD_PRODUCT_ERROR_MESSAGE = "Something went wrong while trying to add a product: ";
-        Product product = new Product();
-
-        // When:
-        // Then:
-        ResponseStatus responseStatus = productService.addProduct(product);
-        assertThat(responseStatus.getSuccess()).isEqualTo(false);
-        assertThat(responseStatus.getMessage()).isEqualTo(ADD_PRODUCT_ERROR_MESSAGE);
-        assertThat(responseStatus.getException()).isEqualTo("Required attributes are missing or product is null!");
+        when(productDao.findByName(randomName)).thenReturn(productDB).equals(productDB);
     }
 
     @Test

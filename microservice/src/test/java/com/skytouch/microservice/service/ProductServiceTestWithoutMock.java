@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static com.skytouch.commonlibrary.config.RabbitMQConfig.*;
 
 @SpringBootTest
-@Transactional
 @RunWith(SpringRunner.class)
 public class ProductServiceTestWithoutMock {
     @Autowired
@@ -73,12 +72,13 @@ public class ProductServiceTestWithoutMock {
         product.setPrice(price);
 
         // When:
-        ResponseStatus response = (ResponseStatus) rabbitTemplate.convertSendAndReceive(EXCHANGE, ADD_PRODUCTS_KEY, product);
+        rabbitTemplate.convertAndSend(EXCHANGE, ADD_PRODUCTS_KEY, product);
 
         // Then:
-        assertThat(response.getSuccess()).isTrue();
-        assertThat(response.getMessage()).isEqualTo("Product " + product.getName() + " was created.");
-        assertThat(response.getException()).isNull();
+        Product createdProduct = productMapper.apply(productDao.findByName(randomName));
+        assertThat(createdProduct.getName()).isEqualTo(product.getName());
+        assertThat(createdProduct.getDescription()).isEqualTo(product.getDescription());
+        assertThat(createdProduct.getPrice()).isEqualTo(product.getPrice());
     }
 
     @Test
