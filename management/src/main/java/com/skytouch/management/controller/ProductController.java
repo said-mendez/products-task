@@ -36,8 +36,7 @@ public class ProductController {
     @PostMapping("/addProduct")
     public RedirectView addBook(@ModelAttribute(MODEL) Product product, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView(ADD_PRODUCTS_URL);
-        redirectAttributes.addFlashAttribute("addProductSuccess", true);
-        redirectAttributes.addFlashAttribute("responseStatus", productService.addProduct(product));
+        productService.addProduct(product);
 
         return redirectView;
     }
