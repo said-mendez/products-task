@@ -21,4 +21,5 @@ public interface ProductDao extends JpaRepository<ProductDB, String> {
     ProductDB addProduct (@Param("name_in") String name_in,
                           @Param("description_in") String description_in,
                           @Param("price_in") BigDecimal price_in);
+    ProductDB findByName(String name);
 }
