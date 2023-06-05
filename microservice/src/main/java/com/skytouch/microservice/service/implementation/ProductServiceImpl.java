@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.skytouch.commonlibrary.config.RabbitMQConfig.ADD_PRODUCTS_QUEUE;
 import static com.skytouch.commonlibrary.config.RabbitMQConfig.LIST_PRODUCTS_QUEUE;
@@ -63,8 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @RabbitListener(queues = ADD_PRODUCTS_QUEUE)
-    public ResponseStatus addProduct(Product product) {
-        ResponseStatus responseStatus = new ResponseStatus();
+    public void addProduct(Product product) {
         Product createdProduct;
 
         try {
@@ -76,17 +74,9 @@ public class ProductServiceImpl implements ProductService {
             createdProduct = productMapper.apply(createdProductDB);
             String message = "Product " + createdProduct.getName() + " was created.";
             log.info(message);
-            responseStatus.setSuccess(true);
-            responseStatus.setMessage(message);
-            responseStatus.setException(null);
         } catch (Exception exception) {
             String ADD_PRODUCT_ERROR_MESSAGE = "Something went wrong while trying to add a product: ";
             log.error(ADD_PRODUCT_ERROR_MESSAGE, exception);
-            responseStatus.setSuccess(false);
-            responseStatus.setMessage(ADD_PRODUCT_ERROR_MESSAGE);
-            responseStatus.setException(ExceptionUtils.getRootCause(exception).getMessage());
         }
-
-        return responseStatus;
     }
 }

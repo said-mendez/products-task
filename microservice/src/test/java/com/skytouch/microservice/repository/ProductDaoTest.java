@@ -1,4 +1,4 @@
-package com.skytouch.microservice.model.repository;
+package com.skytouch.microservice.repository;
 
 import com.skytouch.microservice.model.ProductDB;
 import com.skytouch.microservice.repository.ProductDao;

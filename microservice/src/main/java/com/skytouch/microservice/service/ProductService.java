@@ -6,6 +6,6 @@ import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
 
 public interface ProductService {
     ListProductsRequestResponse fetchAllProducts();
-    ResponseStatus addProduct(Product product);
+    void addProduct(Product product);
 }
 
