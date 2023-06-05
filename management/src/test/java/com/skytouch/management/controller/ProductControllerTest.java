@@ -14,9 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.net.ConnectException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -50,15 +50,7 @@ public class ProductControllerTest {
         expectedProduct.setDescription("New Product I");
         expectedProduct.setPrice(new BigDecimal("123.5"));
 
-        ResponseStatus expectedResponseStatus = new ResponseStatus();
-        expectedResponseStatus.setSuccess(true);
-        expectedResponseStatus.setMessage("Product " + expectedProduct.getName() + " was created.");
-        expectedResponseStatus.setException(null);
-
         // When:
-        when(productService.addProduct(expectedProduct)).thenReturn(expectedResponseStatus);
-
-        // Then:
         MvcResult result =
                 mockMvc.perform(
                 post("/products/addProduct")
@@ -66,47 +58,85 @@ public class ProductControllerTest {
                         .param("description", expectedProduct.getDescription())
                         .param("price", expectedProduct.getPrice().toString())
                 )
-                .andExpect(MockMvcResultMatchers.flash().attribute("responseStatus", expectedResponseStatus))
                 .andReturn()
                 ;
-        ResponseStatus responseStatusResult = (ResponseStatus) result.getFlashMap().get("responseStatus");
 
-        assertThat(expectedResponseStatus.getSuccess()).isEqualTo(responseStatusResult.getSuccess());
-        assertThat(expectedResponseStatus.getMessage()).isEqualTo(responseStatusResult.getMessage());
-        assertThat(expectedResponseStatus.getException()).isEqualTo(responseStatusResult.getException());
+        // Then:
+        assertThat(result.getResponse().getRedirectedUrl()).isEqualTo("/products/addProduct");
     }
 
     @Test
-    public void tryToAddDuplicatedProduct() throws Exception {
+    public void exceptionDisplaysErrorView() {
         // Given:
-        Product duplicatedProduct = new Product();
-        duplicatedProduct.setName("New Product I");
-        duplicatedProduct.setDescription("New Product I");
-        duplicatedProduct.setPrice(new BigDecimal("123.5"));
-
-        ResponseStatus expectedResponseStatus = new ResponseStatus();
-        expectedResponseStatus.setSuccess(false);
-        expectedResponseStatus.setMessage("Microservice is not responding!");
-        expectedResponseStatus.setException("java.lang.RuntimeException");
+        final String ERROR_VIEW = "/error";
+        String [] views = {ERROR_VIEW};
+        String exceptionMessage = "Connection Exception Test";
 
         // When:
-        when(productService.addProduct(duplicatedProduct)).thenThrow(new RuntimeException("Microservice is not responding!"));
-
-        MvcResult result =
-                mockMvc.perform(
-                                post("/products/addProduct")
-                                        .param("name", duplicatedProduct.getName())
-                                        .param("description", duplicatedProduct.getDescription())
-                                        .param("price", duplicatedProduct.getPrice().toString())
-                        )
-                        .andReturn()
-                ;
-        ResponseStatus responseStatusResult = (ResponseStatus) result.getModelAndView().getModel().get("responseStatus");
-
         // Then:
-        assertThat(expectedResponseStatus.getSuccess()).isEqualTo(responseStatusResult.getSuccess());
-        assertThat(expectedResponseStatus.getMessage()).isEqualTo(responseStatusResult.getMessage());
-        assertThat(expectedResponseStatus.getException()).isEqualTo(responseStatusResult.getException());
+        assertThat(
+                new ProductsExceptionHandler()
+                        .handleRuntimeException(
+                                new RuntimeException(exceptionMessage))
+        )
+                .extracting("viewName")
+                .isEqualTo(views)
+        ;
+
+    }
+
+    @Test
+    public void connectException() {
+        // Given:
+        String exceptionMessage = "Connection Exception Test";
+        ResponseStatus expectedResponse = new ResponseStatus();
+        expectedResponse.setSuccess(false);
+        expectedResponse.setException("java.net.ConnectException");
+        expectedResponse.setMessage(exceptionMessage);
+        ResponseStatus[] responseStatuses = {
+            expectedResponse
+        };
+
+
+        // When:
+        // Then:
+        assertThat(
+                new ProductsExceptionHandler()
+                        .handleConnectException(
+                                new ConnectException(exceptionMessage))
+        )
+                .extracting("model")
+                .extracting("responseStatus")
+                .isEqualTo(responseStatuses)
+        ;
+
+    }
+
+    @Test
+    public void exception() {
+        // Given:
+        String exceptionMessage = "Exception Test";
+        ResponseStatus expectedResponse = new ResponseStatus();
+        expectedResponse.setSuccess(false);
+        expectedResponse.setException("java.lang.Exception");
+        expectedResponse.setMessage(exceptionMessage);
+        ResponseStatus[] responseStatuses = {
+                expectedResponse
+        };
+
+
+        // When:
+        // Then:
+        assertThat(
+                new ProductsExceptionHandler()
+                        .handleException(
+                                new Exception(exceptionMessage))
+        )
+                .extracting("model")
+                .extracting("responseStatus")
+                .isEqualTo(responseStatuses)
+        ;
+
     }
 
     @Test

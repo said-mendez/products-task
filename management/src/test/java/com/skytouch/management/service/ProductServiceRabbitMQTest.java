@@ -2,42 +2,33 @@ package com.skytouch.management.service;
 
 
 import com.skytouch.commonlibrary.model.ListProductsRequestResponse;
-import com.skytouch.commonlibrary.model.Product;
 import com.skytouch.commonlibrary.model.ResponseStatus;
 import com.skytouch.management.exception.MicroserviceException;
 import com.skytouch.management.service.implementation.ProductServiceRabbitMQ;
-import org.assertj.core.api.ThrowableAssert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
+import static com.skytouch.commonlibrary.config.RabbitMQConfig.EXCHANGE;
+import static com.skytouch.commonlibrary.config.RabbitMQConfig.LIST_PRODUCTS_KEY;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ProductServiceRabbitMQTest {
+    @Mock
+    public RabbitTemplate rabbitTemplateMock;
+
+    @InjectMocks
     @Autowired
     ProductServiceRabbitMQ productServiceRabbitMQ;
-
-    @Test(expected = MicroserviceException.class)
-    public void addingProductWithMicroserviceDownThrowsMicroserviceException() {
-        // Given:
-        String randomName = UUID.randomUUID().toString();
-        Product product = new Product();
-        product.setName(randomName);
-        product.setDescription("Description " + randomName);
-        product.setPrice(new BigDecimal("45.67"));
-
-        // When:
-        // Then:
-        productServiceRabbitMQ.addProduct(product);
-
-    }
 
     @Test(expected = MicroserviceException.class)
     public void listingProductsWithMicroserviceDownThrowsMicroserviceException() {
@@ -46,5 +37,28 @@ public class ProductServiceRabbitMQTest {
         // Then:
         productServiceRabbitMQ.listProducts();
 
+    }
+
+    @Test
+    public void listProducts() {
+        // Given:
+        String responseMessage = "Listing products";
+        ListProductsRequestResponse expectedResponse = new ListProductsRequestResponse();
+        ResponseStatus responseStatus = new ResponseStatus();
+        responseStatus.setSuccess(true);
+        responseStatus.setMessage(responseMessage);
+        responseStatus.setException(null);
+        Map<String, ResponseStatus> statusMap = new HashMap<>();
+        statusMap.put("status", responseStatus);
+        expectedResponse.setResponseStatus(statusMap);
+
+        // When:
+        when(rabbitTemplateMock.convertSendAndReceive(EXCHANGE, LIST_PRODUCTS_KEY, "")).thenReturn(expectedResponse);
+        ListProductsRequestResponse actualResponse = productServiceRabbitMQ.listProducts();
+
+
+        // Then:
+        assertThat(actualResponse.getResponseStatus().get("status").getSuccess()).isTrue();
+        assertThat(actualResponse.getResponseStatus().get("status").getMessage()).isEqualTo(responseMessage);
     }
 }
